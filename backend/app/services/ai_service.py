@@ -39,10 +39,10 @@ Post:
 
 def analyze_post_with_ai(
     post_text: str,
-    mode: str = "hosted",
-    user_api_key: str = None,
-    model_name: str = "gemini-2.5-flash",
-    tone: str = "professional"
+    tone: str,
+    mode: str,
+    api_key: str,
+    model: str
 ):
 
     # ====================================
@@ -61,13 +61,13 @@ def analyze_post_with_ai(
 
     if mode == "byok":
 
-        if not user_api_key:
+        if not api_key:
 
             raise Exception(
                 "Missing API key"
             )
 
-        api_key = user_api_key
+        api_key = api_key
 
     else:
 
@@ -81,7 +81,7 @@ def analyze_post_with_ai(
 
     model = get_gemini_model(
         api_key=api_key,
-        model_name=model_name
+        model_name=model
     )
 
     # ====================================

@@ -47,14 +47,18 @@ async def analyze_post(
 ):
 
     result = analyze_post_with_ai(
-        data
-    )
+    post_text=data.post_text,
+    tone=data.tone,
+    mode=data.mode,
+    api_key=data.api_key,
+    model=data.model
+)
 
     save_analysis(
 
     db=db,
 
-    user_id=current_user["user_id"],
+    user_id=current_user.id,
 
     post_text=data.post_text,
 
