@@ -1,0 +1,445 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+
+  margin: 0;
+  padding: 0;
+
+  width: 420px;
+  min-width: 420px;
+  max-width: 420px;
+
+  min-height: 620px;
+
+  overflow-x: hidden;
+
+  background: #f7f5f2;
+
+  color: #1f1f1f;
+
+  font-family:
+    "Inter",
+    sans-serif;
+}
+
+
+/* ======================================
+   APP
+====================================== */
+
+.app {
+
+  width: 100%;
+
+  padding: 22px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+
+/* ======================================
+   HEADER
+====================================== */
+
+.header {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+.badge {
+
+  width: fit-content;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  background: #ebe7e1;
+
+  color: #5b5247;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+h1 {
+
+  margin: 0;
+
+  font-size: 30px;
+
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+
+  color: #171717;
+}
+
+.subtitle {
+
+  margin: 0;
+
+  color: #6b665f;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* ======================================
+   CARDS
+====================================== */
+
+.card {
+
+  width: 100%;
+
+  background: #ffffff;
+
+  border: 1px solid #ece7e2;
+
+  border-radius: 22px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.04),
+    0 8px 24px rgba(0,0,0,0.03);
+}
+
+.card-label {
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+
+  color: #8a8178;
+
+  margin-bottom: 16px;
+}
+
+
+/* ======================================
+   STATUS
+====================================== */
+
+.status-row {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 12px;
+}
+
+.status-dot {
+
+  width: 10px;
+
+  height: 10px;
+
+  border-radius: 999px;
+
+  background: #22c55e;
+
+  flex-shrink: 0;
+}
+
+.status-text {
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #1f1f1f;
+}
+
+.status-description {
+
+  color: #6f6a63;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* ======================================
+   STEPS
+====================================== */
+
+.steps {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+.step {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 14px;
+}
+
+.step-number {
+
+  width: 34px;
+
+  height: 34px;
+
+  min-width: 34px;
+
+  border-radius: 999px;
+
+  background: #171717;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.step-content {
+
+  flex: 1;
+}
+
+.step-title {
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #1f1f1f;
+
+  margin-bottom: 4px;
+}
+
+.step-desc {
+
+  color: #6f6a63;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* ======================================
+   FEATURES
+====================================== */
+
+.feature-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.feature-item {
+
+  background: #faf8f5;
+
+  border: 1px solid #efeae4;
+
+  border-radius: 16px;
+
+  padding: 14px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: #2b2b2b;
+}
+
+
+/* ======================================
+   SETTINGS
+====================================== */
+
+.settings-group {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-bottom: 18px;
+}
+
+.settings-label {
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #4b453f;
+}
+
+.select-input,
+.text-input {
+
+  width: 100%;
+
+  border: 1px solid #ddd6cf;
+
+  background: #fcfbf9;
+
+  border-radius: 14px;
+
+  padding: 14px;
+
+  font-size: 14px;
+
+  color: #1f1f1f;
+
+  outline: none;
+
+  transition: border 0.15s ease;
+}
+
+.select-input:focus,
+.text-input:focus {
+
+  border-color: #1f1f1f;
+}
+
+
+/* ======================================
+   BUTTON
+====================================== */
+
+.primary-btn {
+
+  width: 100%;
+
+  border: none;
+
+  border-radius: 16px;
+
+  background: #171717;
+
+  color: white;
+
+  padding: 16px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.primary-btn:hover {
+
+  opacity: 0.92;
+}
+
+.primary-btn:active {
+
+  transform: scale(0.98);
+}
+
+
+/* ======================================
+   SAVE STATUS
+====================================== */
+
+.save-status {
+
+  margin-top: 12px;
+
+  font-size: 13px;
+
+  color: #6f6a63;
+
+  text-align: center;
+}
+
+
+/* ======================================
+   FOOTER
+====================================== */
+
+.footer {
+
+  text-align: center;
+
+  color: #8a8178;
+
+  font-size: 13px;
+
+  line-height: 1.7;
+
+  padding-bottom: 4px;
+}
+
+
+/* ======================================
+   SCROLLBAR
+====================================== */
+
+::-webkit-scrollbar {
+
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+
+  background: #d7d0c8;
+
+  border-radius: 999px;
+}
+
+
+/* ======================================
+   HIDDEN
+====================================== */
+
+.hidden {
+  display: none;
+}

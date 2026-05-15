@@ -1,0 +1,335 @@
+/* =========================================
+   ANALYZE BUTTON
+========================================= */
+
+.linkedin-ai-btn {
+
+  padding: 7px 14px !important;
+
+  border-radius: 999px !important;
+
+  border: 1px solid #d6d3d1 !important;
+
+  background: white !important;
+
+  cursor: pointer !important;
+
+  font-weight: 600 !important;
+
+  color: #1f1f1f !important;
+
+  font-size: 14px !important;
+
+  margin-left: 8px !important;
+
+  display: inline-flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  transition:
+    all 0.15s ease !important;
+}
+
+.linkedin-ai-btn:hover {
+
+  background: #f5f5f4 !important;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   MODAL OVERLAY
+========================================= */
+
+.linkedin-ai-overlay {
+
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0,0,0,0.45);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 999999;
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+.linkedin-ai-modal {
+
+  width: 560px;
+
+  max-height: 85vh;
+
+  overflow-y: auto;
+
+  background: #f7f5f2;
+
+  border-radius: 28px;
+
+  padding: 28px;
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.18);
+
+  font-family:
+    "Inter",
+    sans-serif;
+
+  color: #1f1f1f;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.ai-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 26px;
+}
+
+.ai-badge {
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #7c6f64;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 8px;
+}
+
+.ai-signal {
+
+  margin: 0;
+
+  font-size: 34px;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+}
+
+.ai-confidence {
+
+  background: white;
+
+  border: 1px solid #e7e2dc;
+
+  color: #1f1f1f;
+
+  padding: 12px 16px;
+
+  border-radius: 16px;
+
+  font-weight: 700;
+
+  font-size: 18px;
+}
+
+
+/* =========================================
+   REASONING CARD
+========================================= */
+
+.ai-reason-card {
+
+  background: white;
+
+  border: 1px solid #ebe6df;
+
+  padding: 20px;
+
+  border-radius: 20px;
+
+  margin-bottom: 24px;
+}
+
+.ai-section-label {
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  margin-bottom: 10px;
+
+  color: #7c6f64;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+.ai-reason-text {
+
+  font-size: 16px;
+
+  line-height: 1.8;
+
+  color: #2b2b2b;
+}
+
+
+/* =========================================
+   MESSAGE LIST
+========================================= */
+
+.ai-message-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+.ai-message-card {
+
+  background: white;
+
+  border: 1px solid #ebe6df;
+
+  border-radius: 20px;
+
+  padding: 20px;
+}
+
+.ai-message-title {
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #7c6f64;
+
+  margin-bottom: 12px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+.ai-message-text {
+
+  font-size: 17px;
+
+  line-height: 1.8;
+
+  color: #1f1f1f;
+
+  margin-bottom: 18px;
+}
+
+
+/* =========================================
+   COPY BUTTON
+========================================= */
+
+.ai-copy-btn {
+
+  border: none;
+
+  background: #171717;
+
+  color: white;
+
+  padding: 12px 16px;
+
+  border-radius: 14px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.ai-copy-btn:hover {
+
+  opacity: 0.92;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   CLOSE BUTTON
+========================================= */
+
+.ai-close-btn {
+
+  width: 100%;
+
+  margin-top: 26px;
+
+  border: none;
+
+  background: #171717;
+
+  color: white;
+
+  padding: 16px;
+
+  border-radius: 18px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.15s ease;
+}
+
+.ai-close-btn:hover {
+
+  opacity: 0.92;
+}
+
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+.linkedin-ai-modal::-webkit-scrollbar {
+
+  width: 8px;
+}
+
+.linkedin-ai-modal::-webkit-scrollbar-thumb {
+
+  background: #d6d3d1;
+
+  border-radius: 999px;
+}
