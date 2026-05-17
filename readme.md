@@ -109,3 +109,21 @@ npm install
 
 npm run dev
 ```
+
+## Environment Variables
+
+### Backend (.env)
+
+```
+DATABASE_URL=your_db_url
+
+JWT_SECRET_KEY=your_key
+
+GEMINI_API_KEY=your_api_key
+
+RAZORPAY_KEY_ID=your_account_key
+
+RAZORPAY_KEY_SECRET=your_account_secret_key
+
+RAZORPAY_WEBHOOK_SECRET=your_secret
+```
