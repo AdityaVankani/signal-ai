@@ -65,7 +65,11 @@ async def signup(
             status_code=400,
             detail="Email already exists"
         )
-
+    if len(data.password.encode("utf-8")) > 72:
+        raise HTTPException(
+            status_code=400,
+            detail="Password too long"
+        )
     password_hash = hash_password(
         data.password
     )

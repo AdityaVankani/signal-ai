@@ -6,8 +6,12 @@ google-generativeai
 sqlalchemy 
 psycopg2-binary 
 python-jose 
-passlib[bcrypt] 
+
 python-multipart
 alembic
 email-validator
 razorpay
+
+passlib[bcrypt]==1.7.4
+
+bcrypt==4.0.1
