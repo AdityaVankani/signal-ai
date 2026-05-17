@@ -238,7 +238,7 @@ async function analyzePost(postText) {
 
       model:
         settings.geminiModel ||
-        "gemini-2.5-flash"
+        "gemini-3.1-flash-lite-preview"
     };
 
     // ========================================

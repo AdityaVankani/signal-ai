@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-anthropic-bg: #F5F3EF;
+  --color-anthropic-bg-alt: #EDE9E4;
+  --color-anthropic-text: #1A1A1A;
+  --color-anthropic-text-muted: #6B6B6B;
+  --color-anthropic-accent: #D4A574;
+  --color-anthropic-accent-hover: #C49464;
+  --color-anthropic-border: #E0DCD5;
+  --color-anthropic-card: #FFFFFF;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #F5F3EF;
+  color: #1A1A1A;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
