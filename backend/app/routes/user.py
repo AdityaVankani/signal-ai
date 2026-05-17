@@ -52,7 +52,7 @@ async def get_me(
 
         datetime.utcnow()
 
-        - timedelta(days=1)
+        - timedelta(days=30)
 
     )
 
@@ -66,7 +66,7 @@ async def get_me(
 
             UsageLog.action ==
 
-            "analyze_post",
+            "hosted_analyze_post",
 
             UsageLog.created_at >=
 
@@ -78,7 +78,7 @@ async def get_me(
 
     )
 
-    FREE_LIMIT = 20
+    FREE_LIMIT = 5
 
     remaining_requests = max(
 

@@ -74,7 +74,7 @@ async def create_checkout_session(
 
     payment_link = client.payment_link.create({
 
-        "amount": 39900,
+        "amount": 9900,
 
         "currency": "INR",
 
@@ -95,6 +95,7 @@ async def create_checkout_session(
             "email": True
         },
 
+        # SUCCESS PAGE
         "callback_url":
             "https://signal-ai-nine.vercel.app/success.html",
 
@@ -116,7 +117,7 @@ async def create_checkout_session(
 
 
 # =====================================
-# WEBHOOK
+# RAZORPAY WEBHOOK
 # =====================================
 
 @router.post("/razorpay-webhook")
@@ -144,6 +145,10 @@ async def razorpay_webhook(
 
     ).hexdigest()
 
+    # =====================================
+    # VERIFY SIGNATURE
+    # =====================================
+
     if generated_signature != received_signature:
 
         raise HTTPException(
@@ -168,9 +173,13 @@ async def razorpay_webhook(
         )
 
         user_id = int(
-
             payment_entity["notes"]["user_id"]
+        )
 
+        payment_id = payment_entity["id"]
+
+        customer_email = (
+            payment_entity.get("email")
         )
 
         existing = (
@@ -181,27 +190,47 @@ async def razorpay_webhook(
             .first()
         )
 
-        current_period_end = (
-            datetime.utcnow()
-            + timedelta(days=30)
-        )
+        # =====================================
+        # EXTEND SUBSCRIPTION LOGIC
+        # =====================================
+
+        now = datetime.utcnow()
 
         if existing:
+
+            # If subscription still active
+            # extend from current expiry
+
+            if (
+                existing.current_period_end
+                and
+                existing.current_period_end > now
+            ):
+
+                existing.current_period_end = (
+                    existing.current_period_end
+                    + timedelta(days=30)
+                )
+
+            # If expired
+            # start fresh from today
+
+            else:
+
+                existing.current_period_end = (
+                    now + timedelta(days=30)
+                )
 
             existing.plan = "pro"
 
             existing.status = "active"
 
-            existing.current_period_end = (
-                current_period_end
-            )
-
             existing.payment_customer_id = (
-                payment_entity["email"]
+                customer_email
             )
 
             existing.payment_subscription_id = (
-                payment_entity["id"]
+                payment_id
             )
 
         else:
@@ -211,20 +240,24 @@ async def razorpay_webhook(
                 user_id=user_id,
 
                 payment_customer_id=
-                    payment_entity["email"],
+                    customer_email,
 
                 payment_subscription_id=
-                    payment_entity["id"],
+                    payment_id,
 
                 plan="pro",
 
                 status="active",
 
                 current_period_end=
-                    current_period_end
+                    now + timedelta(days=30)
             )
 
             db.add(subscription)
+
+        # =====================================
+        # USAGE LOG
+        # =====================================
 
         usage = UsageLog(
 

@@ -49,6 +49,121 @@ def get_db():
         db.close()
 
 
+# @router.post("/analyze-post")
+# async def analyze_post(
+#     data: PostRequest,
+#     current_user=Depends(
+#         get_current_user
+#     ),
+#     db: Session = Depends(get_db)
+# ):
+    
+#     user_id = current_user.id
+
+#     # =================================
+
+#     # CHECK SUBSCRIPTION
+
+#     # =================================
+
+#     subscription = get_active_subscription(
+
+#         db,
+
+#         user_id
+
+#     )
+
+#     is_pro = subscription is not None
+
+#     # =================================
+
+#     # FREE PLAN LIMIT
+
+#     # =================================
+
+#     if not is_pro:
+
+#         last_24_hours = (
+
+#             datetime.utcnow()
+
+#             - timedelta(days=30)
+
+#         )
+
+#         usage_count = (
+
+#             db.query(UsageLog)
+
+#             .filter(
+
+#                 UsageLog.user_id == user_id,
+
+#                 UsageLog.action ==
+
+#                 "analyze_post",
+
+#                 UsageLog.created_at >=
+
+#                 last_24_hours
+
+#             )
+
+#             .count()
+
+#         )
+
+#         FREE_LIMIT = 5
+
+#         if usage_count >= FREE_LIMIT:
+
+#             raise HTTPException(
+
+#                 status_code=403,
+
+#                 detail=
+
+#                     "Free limit reached. Upgrade to Pro."
+
+#             )
+
+#     result = analyze_post_with_ai(
+#     post_text=data.post_text,
+#     tone=data.tone,
+#     mode=data.mode,
+#     api_key=data.api_key,
+#     model=data.model
+# )
+
+#     save_analysis(
+
+#     db=db,
+
+#     user_id=current_user.id,
+
+#     post_text=data.post_text,
+
+#     tone=data.tone,
+
+#     result=result
+# )
+#     usage = UsageLog(
+
+#         user_id=user_id,
+
+#         action="analyze_post",
+
+#         ip_address="extension"
+
+#     )
+
+#     db.add(usage)
+
+#     db.commit()
+
+#     return result
+
 @router.post("/analyze-post")
 async def analyze_post(
     data: PostRequest,
@@ -57,109 +172,97 @@ async def analyze_post(
     ),
     db: Session = Depends(get_db)
 ):
-    
+
     user_id = current_user.id
 
     # =================================
-
     # CHECK SUBSCRIPTION
-
     # =================================
 
     subscription = get_active_subscription(
-
         db,
-
         user_id
-
     )
 
     is_pro = subscription is not None
 
     # =================================
-
-    # FREE PLAN LIMIT
-
+    # HOSTED MODE ONLY
     # =================================
 
-    if not is_pro:
+    if data.mode == "hosted":
 
-        last_24_hours = (
+        # =============================
+        # FREE PLAN LIMIT
+        # =============================
 
-            datetime.utcnow()
+        if not is_pro:
 
-            - timedelta(days=1)
-
-        )
-
-        usage_count = (
-
-            db.query(UsageLog)
-
-            .filter(
-
-                UsageLog.user_id == user_id,
-
-                UsageLog.action ==
-
-                "analyze_post",
-
-                UsageLog.created_at >=
-
-                last_24_hours
-
+            last_24_hours = (
+                datetime.utcnow()
+                - timedelta(days=30)
             )
 
-            .count()
-
-        )
-
-        FREE_LIMIT = 20
-
-        if usage_count >= FREE_LIMIT:
-
-            raise HTTPException(
-
-                status_code=403,
-
-                detail=
-
-                    "Free limit reached. Upgrade to Pro."
-
+            usage_count = (
+                db.query(UsageLog)
+                .filter(
+                    UsageLog.user_id == user_id,
+                    UsageLog.action == "hosted_analyze_post",
+                    UsageLog.created_at >= last_24_hours
+                )
+                .count()
             )
+
+            FREE_LIMIT = 5
+
+            if usage_count >= FREE_LIMIT:
+
+                raise HTTPException(
+                    status_code=403,
+                    detail=(
+                        "Free limit reached. "
+                        "Upgrade to Pro."
+                    )
+                )
+
+    # =================================
+    # AI ANALYSIS
+    # =================================
 
     result = analyze_post_with_ai(
-    post_text=data.post_text,
-    tone=data.tone,
-    mode=data.mode,
-    api_key=data.api_key,
-    model=data.model
-)
-
-    save_analysis(
-
-    db=db,
-
-    user_id=current_user.id,
-
-    post_text=data.post_text,
-
-    tone=data.tone,
-
-    result=result
-)
-    usage = UsageLog(
-
-        user_id=user_id,
-
-        action="analyze_post",
-
-        ip_address="extension"
-
+        post_text=data.post_text,
+        tone=data.tone,
+        mode=data.mode,
+        api_key=data.api_key,
+        model=data.model
     )
 
-    db.add(usage)
+    # =================================
+    # SAVE ANALYSIS
+    # =================================
 
-    db.commit()
+    save_analysis(
+        db=db,
+        user_id=user_id,
+        post_text=data.post_text,
+        tone=data.tone,
+        result=result
+    )
+
+    # =================================
+    # ONLY TRACK HOSTED USAGE
+    # =================================
+
+    if data.mode == "hosted":
+
+        usage = UsageLog(
+            user_id=user_id,
+            action="hosted_analyze_post",
+            ip_address="extension"
+        )
+
+        db.add(usage)
+
+        db.commit()
 
     return result
