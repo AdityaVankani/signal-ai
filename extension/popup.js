@@ -3,7 +3,7 @@
 // ========================================
 
 const API_BASE =
-  "http://127.0.0.1:8000";
+  "https://signal-ai-wi1d.onrender.com";
 
 let authMode = "login";
 
@@ -417,7 +417,7 @@ async function loadCurrentPlan() {
 
     const response =
       await fetch(
-        "http://127.0.0.1:8000/me",
+        "https://signal-ai-wi1d.onrender.com/me",
         {
           headers: {
 

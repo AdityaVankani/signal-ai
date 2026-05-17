@@ -13,7 +13,8 @@
 
   "host_permissions": [
     "https://www.linkedin.com/*",
-    "http://127.0.0.1:8000/*"
+    "http://127.0.0.1:8000/*",
+    "https://signal-ai-wi1d.onrender.com/*"
   ],
 
   "action": {

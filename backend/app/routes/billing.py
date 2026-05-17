@@ -1,19 +1,25 @@
 from datetime import datetime
 from datetime import timedelta
 
-import stripe
+import hmac
+import hashlib
+import json
 
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import Request
-from fastapi import HTTPException
+import razorpay
+
+from fastapi import (
+    APIRouter,
+    Depends,
+    HTTPException,
+    Request
+)
 
 from sqlalchemy.orm import Session
 
 from app.core.config import (
-    STRIPE_SECRET_KEY,
-    STRIPE_PRICE_ID,
-    STRIPE_WEBHOOK_SECRET
+    RAZORPAY_KEY_ID,
+    RAZORPAY_KEY_SECRET,
+    RAZORPAY_WEBHOOK_SECRET
 )
 
 from app.dependencies.auth import (
@@ -32,9 +38,14 @@ from app.db.models.usage_log import (
     UsageLog
 )
 
-stripe.api_key = STRIPE_SECRET_KEY
-
 router = APIRouter()
+
+client = razorpay.Client(
+    auth=(
+        RAZORPAY_KEY_ID,
+        RAZORPAY_KEY_SECRET
+    )
+)
 
 
 # =====================================
@@ -53,7 +64,7 @@ def get_db():
 
 
 # =====================================
-# CREATE CHECKOUT SESSION
+# CREATE PAYMENT LINK
 # =====================================
 
 @router.post("/create-checkout-session")
@@ -61,129 +72,106 @@ async def create_checkout_session(
     user=Depends(get_current_user)
 ):
 
-    session = stripe.checkout.Session.create(
+    payment_link = client.payment_link.create({
 
-        payment_method_types=["card"],
+        "amount": 350,
 
-        mode="subscription",
+        "currency": "INR",
 
-        line_items=[{
-            "price": STRIPE_PRICE_ID,
-            "quantity": 1
-        }],
+        "description":
+            "Signal AI Pro Plan",
 
-        success_url=
-            "http://127.0.0.1:5500/frontend/success.html",
+        "customer": {
 
-        cancel_url=
-            "http://127.0.0.1:5500/frontend/cancel.html",
+            "name":
+                user.full_name,
 
-        customer_email=user.email,
+            "email":
+                user.email
+        },
 
-        metadata={
-            "user_id": user.id
+        "notify": {
+
+            "email": True
+        },
+
+        "callback_url":
+            "https://signal-ai-nine.vercel.app/success.html",
+
+        "callback_method":
+            "get",
+
+        "notes": {
+
+            "user_id":
+                str(user.id)
         }
-    )
+    })
 
     return {
-        "checkout_url": session.url
+
+        "checkout_url":
+            payment_link["short_url"]
     }
 
 
 # =====================================
-# STRIPE WEBHOOK
+# WEBHOOK
 # =====================================
 
-@router.post("/stripe-webhook")
-async def stripe_webhook(
+@router.post("/razorpay-webhook")
+async def razorpay_webhook(
     request: Request,
     db: Session = Depends(get_db)
 ):
 
-    payload = await request.body()
+    body = await request.body()
 
-    sig_header = request.headers.get(
-        "stripe-signature"
+    received_signature = request.headers.get(
+        "X-Razorpay-Signature"
     )
 
-    try:
+    generated_signature = hmac.new(
 
-        event = stripe.Webhook.construct_event(
-            payload,
-            sig_header,
-            STRIPE_WEBHOOK_SECRET
-        )
+        bytes(
+            RAZORPAY_WEBHOOK_SECRET,
+            "utf-8"
+        ),
 
-    except Exception as e:
+        body,
+
+        hashlib.sha256
+
+    ).hexdigest()
+
+    if generated_signature != received_signature:
 
         raise HTTPException(
             status_code=400,
-            detail=str(e)
+            detail="Invalid signature"
         )
 
-    # =================================
+    payload = json.loads(body)
+
+    event = payload["event"]
+
+    # =====================================
     # PAYMENT SUCCESS
-    # =================================
+    # =====================================
 
-    if event["type"] == "checkout.session.completed":
+    if event == "payment.captured":
 
-        session_data = event["data"]["object"]
+        payment_entity = (
+            payload["payload"]
+            ["payment"]
+            ["entity"]
+        )
 
         user_id = int(
-            session_data["metadata"]["user_id"]
+
+            payment_entity["notes"]["user_id"]
+
         )
-
-        stripe_customer_id = (
-            session_data["customer"]
-        )
-
-        stripe_subscription_id = (
-            session_data["subscription"]
-        )
-
-        # =================================
-        # SAFE PERIOD END FETCH
-        # =================================
-
-        try:
-
-            stripe_subscription = (
-                stripe.Subscription.retrieve(
-                    stripe_subscription_id
-                )
-            )
-
-            period_end_timestamp = (
-                stripe_subscription.get(
-                    "current_period_end"
-                )
-            )
-
-            if period_end_timestamp:
-
-                current_period_end = (
-                    datetime.utcfromtimestamp(
-                        period_end_timestamp
-                    )
-                )
-
-            else:
-
-                current_period_end = (
-                    datetime.utcnow()
-                    + timedelta(days=30)
-                )
-
-        except Exception:
-
-            current_period_end = (
-                datetime.utcnow()
-                + timedelta(days=30)
-            )
-
-        # =================================
-        # EXISTING SUBSCRIPTION
-        # =================================
 
         existing = (
             db.query(Subscription)
@@ -191,6 +179,11 @@ async def stripe_webhook(
                 Subscription.user_id == user_id
             )
             .first()
+        )
+
+        current_period_end = (
+            datetime.utcnow()
+            + timedelta(days=30)
         )
 
         if existing:
@@ -203,12 +196,12 @@ async def stripe_webhook(
                 current_period_end
             )
 
-            existing.stripe_customer_id = (
-                stripe_customer_id
+            existing.payment_customer_id = (
+                payment_entity["email"]
             )
 
-            existing.stripe_subscription_id = (
-                stripe_subscription_id
+            existing.payment_subscription_id = (
+                payment_entity["id"]
             )
 
         else:
@@ -217,11 +210,11 @@ async def stripe_webhook(
 
                 user_id=user_id,
 
-                stripe_customer_id=
-                    stripe_customer_id,
+                payment_customer_id=
+                    payment_entity["email"],
 
-                stripe_subscription_id=
-                    stripe_subscription_id,
+                payment_subscription_id=
+                    payment_entity["id"],
 
                 plan="pro",
 
@@ -233,17 +226,13 @@ async def stripe_webhook(
 
             db.add(subscription)
 
-        # =================================
-        # LOG USAGE
-        # =================================
-
         usage = UsageLog(
 
             user_id=user_id,
 
             action="subscription_upgrade",
 
-            ip_address="stripe_webhook"
+            ip_address="razorpay_webhook"
         )
 
         db.add(usage)

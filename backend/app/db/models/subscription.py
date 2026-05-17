@@ -26,9 +26,12 @@ class Subscription(Base):
 
     )
 
-    stripe_customer_id = Column(String)
+    # stripe_customer_id = Column(String)
 
-    stripe_subscription_id = Column(String)
+    # stripe_subscription_id = Column(String)
+    payment_customer_id = Column(String)
+
+    payment_subscription_id = Column(String)
 
     plan = Column(String)
 

@@ -247,7 +247,7 @@ async function analyzePost(postText) {
 
     const response =
       await fetch(
-        "http://127.0.0.1:8000/analyze-post",
+        "https://signal-ai-wi1d.onrender.com/analyze-post",
         {
           method: "POST",
 
