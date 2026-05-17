@@ -74,7 +74,7 @@ async def create_checkout_session(
 
     payment_link = client.payment_link.create({
 
-        "amount": 350,
+        "amount": 39900,
 
         "currency": "INR",
 
