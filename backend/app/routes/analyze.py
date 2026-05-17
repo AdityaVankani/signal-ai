@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from datetime import datetime, timedelta
+
+from fastapi import APIRouter, HTTPException
 from fastapi import Depends
 
 from sqlalchemy.orm import Session
@@ -15,12 +17,22 @@ from app.db.database import (
     SessionLocal
 )
 
+from app.repositories.subscription_repository import (
+    get_active_subscription
+)
+
 from app.repositories.analysis_repository import (
     save_analysis
 )
 
 from app.dependencies.auth import (
     get_current_user
+)
+
+from app.db.models.usage_log import (
+
+    UsageLog
+
 )
 
 router = APIRouter()
@@ -45,6 +57,76 @@ async def analyze_post(
     ),
     db: Session = Depends(get_db)
 ):
+    
+    user_id = current_user.id
+
+    # =================================
+
+    # CHECK SUBSCRIPTION
+
+    # =================================
+
+    subscription = get_active_subscription(
+
+        db,
+
+        user_id
+
+    )
+
+    is_pro = subscription is not None
+
+    # =================================
+
+    # FREE PLAN LIMIT
+
+    # =================================
+
+    if not is_pro:
+
+        last_24_hours = (
+
+            datetime.utcnow()
+
+            - timedelta(days=1)
+
+        )
+
+        usage_count = (
+
+            db.query(UsageLog)
+
+            .filter(
+
+                UsageLog.user_id == user_id,
+
+                UsageLog.action ==
+
+                "analyze_post",
+
+                UsageLog.created_at >=
+
+                last_24_hours
+
+            )
+
+            .count()
+
+        )
+
+        FREE_LIMIT = 20
+
+        if usage_count >= FREE_LIMIT:
+
+            raise HTTPException(
+
+                status_code=403,
+
+                detail=
+
+                    "Free limit reached. Upgrade to Pro."
+
+            )
 
     result = analyze_post_with_ai(
     post_text=data.post_text,
@@ -66,5 +148,18 @@ async def analyze_post(
 
     result=result
 )
+    usage = UsageLog(
+
+        user_id=user_id,
+
+        action="analyze_post",
+
+        ip_address="extension"
+
+    )
+
+    db.add(usage)
+
+    db.commit()
 
     return result

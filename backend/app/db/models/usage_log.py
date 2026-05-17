@@ -18,6 +18,8 @@ class UsageLog(Base):
         index=True
     )
 
+    user_id = Column(Integer)
+
     action = Column(String)
 
     ip_address = Column(String)

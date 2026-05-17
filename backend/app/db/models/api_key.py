@@ -1,4 +1,4 @@
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Boolean
@@ -18,6 +18,12 @@ class ApiKey(Base):
 
     provider = Column(String)
 
+    user_id = Column(
+    Integer,
+    ForeignKey("users.id"),
+    nullable=False
+    )
+    
     encrypted_key = Column(String)
 
     active = Column(

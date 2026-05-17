@@ -177,25 +177,47 @@ async function analyzePost(postText) {
 
   try {
 
+    // ========================================
+    // LOAD SETTINGS + TOKEN
+    // ========================================
+
     const settings =
-  await new Promise((resolve) => {
+      await new Promise((resolve) => {
 
-    chrome.storage.local.get(
-      [
-        "mode",
-        "geminiApiKey",
-        "geminiModel",
-        "tone"
-      ],
+        chrome.storage.local.get(
+          [
+            "mode",
+            "geminiApiKey",
+            "geminiModel",
+            "tone",
+            "token"
+          ],
 
-      (result) => {
+          (result) => {
 
-        resolve(result);
+            resolve(result);
 
-      }
-    );
+          }
+        );
 
-  });
+      });
+
+    // ========================================
+    // BLOCK IF NOT LOGGED IN
+    // ========================================
+
+    if (!settings.token) {
+
+      alert(
+        "Please login to use Signal AI."
+      );
+
+      return;
+    }
+
+    // ========================================
+    // REQUEST BODY
+    // ========================================
 
     const requestBody = {
 
@@ -219,6 +241,10 @@ async function analyzePost(postText) {
         "gemini-2.5-flash"
     };
 
+    // ========================================
+    // API CALL
+    // ========================================
+
     const response =
       await fetch(
         "http://127.0.0.1:8000/analyze-post",
@@ -226,8 +252,12 @@ async function analyzePost(postText) {
           method: "POST",
 
           headers: {
+
             "Content-Type":
-              "application/json"
+              "application/json",
+
+            "Authorization":
+              `Bearer ${settings.token}`
           },
 
           body: JSON.stringify(
@@ -236,6 +266,27 @@ async function analyzePost(postText) {
         }
       );
 
+    // ========================================
+    // HANDLE UNAUTHORIZED
+    // ========================================
+
+    if (response.status === 401) {
+
+      chrome.storage.local.remove(
+        "token"
+      );
+
+      alert(
+        "Session expired. Please login again."
+      );
+
+      return;
+    }
+
+    // ========================================
+    // HANDLE FAILURE
+    // ========================================
+
     if (!response.ok) {
 
       throw new Error(
@@ -243,12 +294,18 @@ async function analyzePost(postText) {
       );
     }
 
+    // ========================================
+    // SUCCESS
+    // ========================================
+
     const data =
       await response.json();
 
     createModal(data);
 
   } catch (err) {
+
+    console.error(err);
 
     alert(
       "AI analysis failed."

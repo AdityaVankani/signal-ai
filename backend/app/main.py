@@ -17,6 +17,8 @@ from app.db.database import (
     engine
 )
 
+
+from app.routes.billing import router as billing_router
 # =========================================
 # IMPORT TABLES
 # =========================================
@@ -39,7 +41,7 @@ from app.db.models.api_key import (
     ApiKey
 )
 
-
+from app.routes import user
 # =========================================
 # CREATE TABLES
 # =========================================
@@ -75,6 +77,10 @@ app.add_middleware(
 )
 
 
+
+app.include_router(
+    billing_router
+)
 # =========================================
 # ROUTERS
 # =========================================
@@ -86,7 +92,7 @@ app.include_router(
 app.include_router(
     analyze_router
 )
-
+app.include_router(user.router)
 
 # =========================================
 # HEALTH CHECK
