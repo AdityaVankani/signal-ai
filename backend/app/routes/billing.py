@@ -17,6 +17,7 @@ from fastapi import (
 from sqlalchemy.orm import Session
 
 from app.core.config import (
+    FRONTEND_SUCCESS_URL,
     RAZORPAY_KEY_ID,
     RAZORPAY_KEY_SECRET,
     RAZORPAY_WEBHOOK_SECRET
@@ -97,7 +98,7 @@ async def create_checkout_session(
 
         # SUCCESS PAGE
         "callback_url":
-            "https://signal-ai-nine.vercel.app/success.html",
+           FRONTEND_SUCCESS_URL,
 
         "callback_method":
             "get",
