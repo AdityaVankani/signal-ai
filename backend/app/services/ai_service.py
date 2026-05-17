@@ -16,7 +16,7 @@ Analyze this LinkedIn post.
 Return ONLY valid JSON.
 
 {{
-  "signal": "hiring | growth | pain | ignore",
+  "signal": "hiring | growth | pain | ignore | General Talks",
   "confidence": number,
   "reasoning": "short reason",
   "messages": [

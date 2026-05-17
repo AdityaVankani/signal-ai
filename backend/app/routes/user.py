@@ -78,7 +78,7 @@ async def get_me(
 
     )
 
-    FREE_LIMIT = 5
+    FREE_LIMIT = 30
 
     remaining_requests = max(
 

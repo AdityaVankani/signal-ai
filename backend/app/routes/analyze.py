@@ -213,7 +213,7 @@ async def analyze_post(
                 .count()
             )
 
-            FREE_LIMIT = 5
+            FREE_LIMIT = 30
 
             if usage_count >= FREE_LIMIT:
 
