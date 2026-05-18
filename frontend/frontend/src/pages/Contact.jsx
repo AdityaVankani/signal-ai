@@ -1,26 +1,84 @@
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
+
 import MainLayout from "../layouts/MainLayout";
 
 function Contact() {
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
+
+    name: "",
+    email: "",
+    message: ""
+
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Message sent successfully!');
-    setFormData({ name: '', email: '', message: '' });
-  };
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
+
     setFormData({
+
       ...formData,
+
       [e.target.name]: e.target.value
+
     });
+
+  };
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+
+    try {
+
+      setLoading(true);
+
+      await emailjs.send(
+
+  import.meta.env.VITE_EMAILJS_SERVICE_ID,
+
+  import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+
+  {
+
+    from_name: formData.name,
+
+    from_email: formData.email,
+
+    message: formData.message
+
+  },
+
+  import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+
+);
+
+      alert("Message sent successfully!");
+
+      setFormData({
+
+        name: "",
+
+        email: "",
+
+        message: ""
+
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Failed to send message.");
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
   };
 
   return (
@@ -44,7 +102,10 @@ function Contact() {
 
         <div className="mt-16 bg-white border border-[#E0DCD5] rounded-2xl p-10">
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-8"
+          >
 
             <div>
 
@@ -70,7 +131,6 @@ function Contact() {
                   py-4
                   outline-none
                   focus:border-[#D4A574]
-                  transition
                 "
               />
 
@@ -100,7 +160,6 @@ function Contact() {
                   py-4
                   outline-none
                   focus:border-[#D4A574]
-                  transition
                 "
               />
 
@@ -130,18 +189,33 @@ function Contact() {
                   py-4
                   outline-none
                   focus:border-[#D4A574]
-                  transition
                 "
               />
 
             </div>
 
-            <button 
+            <button
               type="submit"
-              className="w-full bg-[#1A1A1A] text-white py-4 rounded-2xl font-semibold hover:bg-[#333333] transition"
+              disabled={loading}
+              className="
+                w-full
+                bg-[#1A1A1A]
+                text-white
+                py-4
+                rounded-2xl
+                font-semibold
+                hover:bg-[#333333]
+                transition
+              "
             >
 
-              Send Message
+              {
+
+                loading
+                ? "Sending..."
+                : "Send Message"
+
+              }
 
             </button>
 
@@ -152,7 +226,9 @@ function Contact() {
       </section>
 
     </MainLayout>
+
   );
+
 }
 
 export default Contact;

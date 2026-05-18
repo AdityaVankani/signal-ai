@@ -21,6 +21,10 @@ The extension analyzes LinkedIn posts in real-time and helps users:
 
 The goal is to reduce manual effort while improving outreach quality and conversion potential.
 
+# Install Extension
+
+👉 [Install Signal AI from Chrome Web Store](YOUR_CHROME_EXTENSION_LINK)
+
 # Features
 
 ## AI LinkedIn Post Analysis
@@ -55,7 +59,7 @@ When BYOK is enabled:
 - Standard response speed
 
 ### Pro Plan
-- Higher quotas
+- Higher quotas: No Limits on monthly analyses
 - Faster responses
 - Better engagement optimization
 
@@ -126,4 +130,8 @@ RAZORPAY_KEY_ID=your_account_key
 RAZORPAY_KEY_SECRET=your_account_secret_key
 
 RAZORPAY_WEBHOOK_SECRET=your_secret
+
+FRONTEND_SUCCESS_URL=your_endpoint_url
+
+FRONTEND_CANCEL_URL=your_endpoint_url
 ```
