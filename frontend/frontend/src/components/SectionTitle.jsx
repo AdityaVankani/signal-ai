@@ -13,7 +13,7 @@ function SectionTitle({
 
       </h2>
 
-      <p className="mt-5 text-lg text-white/70">
+      <p className="mt-5 text-lg text-[#6B6B6B]">
 
         {subtitle}
 

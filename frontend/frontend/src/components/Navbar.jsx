@@ -4,7 +4,7 @@ function Navbar() {
 
   return (
 
-    <nav className="flex items-center justify-between px-8 py-5 border-b border-[#E0DCD5] bg-[#F5F3EF]">
+    <nav className="flex items-center justify-between px-8 py-5 border-b border-[#E0DCD5] bg-[#F5F3EF] sticky top-0 z-50">
 
       <Link
         to="/"
@@ -13,7 +13,7 @@ function Navbar() {
         Signal AI
       </Link>
 
-      <div className="flex gap-6">
+      <div className="flex gap-6" >
 
         <a 
           href="#features" 
