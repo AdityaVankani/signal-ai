@@ -3,6 +3,7 @@ if (window.signalAIInjected) {
 } else {
   window.signalAIInjected = true;
 }
+
 // ========================================
 // CREATE RESULT MODAL
 // ========================================
@@ -320,106 +321,162 @@ async function analyzePost(postText) {
 
 function injectButtons() {
 
-  const posts =
+  const textBoxes =
     document.querySelectorAll(
-      'span[data-testid="expandable-text-box"]'
+      '[data-testid="expandable-text-box"]'
     );
 
-  posts.forEach((textBox) => {
+
+  textBoxes.forEach((textBox) => {
+
+    // ===================================
+    // AVOID DUPLICATES
+    // ===================================
 
     if (
-      textBox.parentElement.querySelector(
-        ".linkedin-ai-btn"
-      )
+      textBox.dataset.signalInjected
     ) {
       return;
     }
+
+    // ===================================
+    // GET POST TEXT
+    // ===================================
 
     const postText =
       textBox.innerText?.trim();
 
     if (
       !postText ||
-      postText.length < 20
+      postText.length < 50
     ) {
       return;
     }
 
-    let container =
-      textBox.parentElement;
+    textBox.dataset.signalInjected =
+      "true";
 
-    let level = 0;
+    
 
-    while (
-      container &&
-      level < 15
-    ) {
+    // ===================================
+    // CREATE WRAPPER
+    // ===================================
 
-      const sendButton =
-        container.querySelector(
-          '[aria-label="Send"]'
-        );
+    const wrapper =
+      document.createElement("div");
 
-      if (sendButton) {
+    wrapper.style.marginTop =
+      "12px";
 
-        if (
-          container.querySelector(
-            ".linkedin-ai-btn"
-          )
-        ) {
-          return;
-        }
+    wrapper.style.display =
+      "flex";
 
-        const btn =
-          document.createElement(
-            "button"
+    wrapper.style.alignItems =
+      "center";
+
+    wrapper.style.gap =
+      "10px";
+
+    // ===================================
+    // BUTTON
+    // ===================================
+
+    const btn =
+      document.createElement(
+        "button"
+      );
+
+    btn.innerText =
+      "✨ Analyze";
+
+    btn.style.padding =
+      "8px 18px";
+
+    btn.style.border =
+      "none";
+
+    btn.style.borderRadius =
+      "999px";
+
+    btn.style.background =
+      "#0A66C2";
+
+    btn.style.color =
+      "#fff";
+
+    btn.style.fontWeight =
+      "600";
+
+    btn.style.cursor =
+      "pointer";
+
+    btn.style.fontSize =
+      "14px";
+
+    btn.style.boxShadow =
+      "0 2px 8px rgba(0,0,0,0.15)";
+
+    btn.style.transition =
+      "all 0.2s ease";
+
+    btn.onmouseenter = () => {
+
+      btn.style.opacity = "0.9";
+
+    };
+
+    btn.onmouseleave = () => {
+
+      btn.style.opacity = "1";
+
+    };
+
+    // ===================================
+    // CLICK
+    // ===================================
+
+    btn.onclick =
+      async (e) => {
+
+        e.stopPropagation();
+
+        btn.innerText =
+          "Analyzing...";
+
+        btn.disabled = true;
+
+        try {
+
+          await analyzePost(
+            postText
           );
+
+        } catch (err) {
+
+          console.error(err);
+
+        }
 
         btn.innerText =
           "✨ Analyze";
 
-        btn.className =
-          "linkedin-ai-btn";
+        btn.disabled = false;
+      };
 
-        btn.onclick =
-          async (e) => {
+    // ===================================
+    // APPEND
+    // ===================================
 
-            e.stopPropagation();
+    wrapper.appendChild(btn);
 
-            btn.innerText =
-              "Analyzing...";
+    textBox.insertAdjacentElement(
+      "afterend",
+      wrapper
+    );
 
-            btn.disabled = true;
-
-            try {
-
-              await analyzePost(
-                postText
-              );
-
-            } catch (err) {}
-
-            btn.innerText =
-              "✨ Analyze";
-
-            btn.disabled = false;
-          };
-
-        sendButton.insertAdjacentElement(
-          "afterend",
-          btn
-        );
-
-        return;
-      }
-
-      container =
-        container.parentElement;
-
-      level++;
-    }
   });
 }
+
 
 
 // ========================================

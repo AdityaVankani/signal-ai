@@ -21,9 +21,14 @@ The extension analyzes LinkedIn posts in real-time and helps users:
 
 The goal is to reduce manual effort while improving outreach quality and conversion potential.
 
-# Install Extension
+# Setup Steps:
 
-👉 [Install Signal AI from Chrome Web Store](YOUR_CHROME_EXTENSION_LINK)
+1. Download repo as zip or clone it.
+2. Extract it.
+3. Go to Chrome extension.
+4. Load unpacked the "extension" folder of the project.
+
+
 
 # Features
 
