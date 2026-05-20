@@ -1,7 +1,7 @@
 function CTA() {
 
   const handleAddExtension = () => {
-    window.open('https://chrome.google.com/webstore', '_blank');
+    window.open('https://github.com/AdityaVankani/signal-ai/archive/refs/tags/signal-ai-extension.zip', '_blank');
   };
 
   return (
@@ -31,7 +31,7 @@ function CTA() {
           className="mt-10 bg-[#D4A574] text-white px-10 py-5 rounded-2xl text-lg font-semibold hover:bg-[#C49464] transition relative z-10"
         >
 
-          Add Chrome Extension
+          Download Extension
 
         </button>
 

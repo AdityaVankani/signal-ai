@@ -1,9 +1,9 @@
 function Hero() {
 
-  const handleAddExtension = () => {
+  const handleDownloadExtension = () => {
 
     window.open(
-      'https://chrome.google.com/webstore',
+      'https://github.com/AdityaVankani/signal-ai/archive/refs/tags/signal-ai-extension.zip',
       '_blank'
     );
 
@@ -52,11 +52,11 @@ function Hero() {
       <div className="mt-12 flex flex-wrap justify-center gap-5">
 
         <button
-          onClick={handleAddExtension}
+          onClick={handleDownloadExtension}
           className="bg-[#1A1A1A] text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-[#333333] transition-all duration-300 shadow-sm"
         >
 
-          Add Chrome Extension
+          Download Extension
 
         </button>
 
@@ -70,6 +70,14 @@ function Hero() {
         </a>
 
       </div>
+
+      {/* Beta Notice */}
+
+      <p className="mt-5 text-sm text-[#6B6B6B]">
+
+        Chrome Extension Beta • Install via Developer Mode
+
+      </p>
 
       {/* Demo Video Section */}
 
