@@ -3,7 +3,7 @@ function Hero() {
   const handleDownloadExtension = () => {
 
     window.open(
-      'https://github.com/AdityaVankani/signal-ai/archive/refs/tags/signal-ai-extension.zip',
+      'https://github.com/AdityaVankani/signal-ai/archive/refs/tags/signal-ai.zip',
       '_blank'
     );
 
