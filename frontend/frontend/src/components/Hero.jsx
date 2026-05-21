@@ -92,7 +92,7 @@ function Hero() {
 
             <iframe
               className="w-full h-full"
-              src="https://www.youtube.com/embed/LK1WSRbvRoo"
+              src="https://www.youtube.com/embed/_m7quETWTJ8"
               title="Signal AI Demo"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
