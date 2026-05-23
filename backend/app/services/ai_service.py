@@ -31,6 +31,17 @@ Rules:
 - personalized
 - no markdown
 - tone must be: {tone}
+- behavior must be: {behavior}
+
+Behavior meanings:
+- support -> agree and positively reinforce the post
+- oppose -> respectfully challenge the post
+- curious -> ask thoughtful follow-up questions
+- neutral -> balanced professional response
+- networking -> relationship-building response
+- sales -> business/outreach focused response
+
+Generate responses according to BOTH tone and behavior.
 
 Post:
 {post}
@@ -40,6 +51,7 @@ Post:
 def analyze_post_with_ai(
     post_text: str,
     tone: str,
+    behavior:str,
     mode: str,
     api_key: str,
     model: str
@@ -91,7 +103,7 @@ def analyze_post_with_ai(
     prompt = MASTER_PROMPT.format(
 
     post=clean_post,
-
+    behavior=behavior,
     tone=tone
 
 )

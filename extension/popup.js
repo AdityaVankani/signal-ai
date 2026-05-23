@@ -82,6 +82,10 @@ const toneSelect =
   document.getElementById(
     "toneSelect"
   );
+const behaviorSelect=
+  document.getElementById(
+    "behaviorSelect"
+  );
 
 const modeSelect =
   document.getElementById(
@@ -378,7 +382,8 @@ function loadSettings() {
       "mode",
       "geminiApiKey",
       "geminiModel",
-      "tone"
+      "tone",
+      "behavior",
     ],
 
     (result) => {
@@ -396,6 +401,10 @@ function loadSettings() {
       toneSelect.value =
         result.tone ||
         "professional";
+      
+      behaviorSelect.value = 
+        result.behavior ||
+        "neutral";
 
       updateSettingsUI();
     }
@@ -593,7 +602,10 @@ function saveSettings() {
       modelSelect.value,
 
     tone:
-      toneSelect.value
+      toneSelect.value,
+    behavior:
+      behaviorSelect.value,
+
   };
 
   chrome.storage.local.set(

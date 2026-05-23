@@ -232,6 +232,7 @@ async def analyze_post(
     result = analyze_post_with_ai(
         post_text=data.post_text,
         tone=data.tone,
+        behavior=data.behavior,
         mode=data.mode,
         api_key=data.api_key,
         model=data.model

@@ -191,7 +191,8 @@ async function analyzePost(postText) {
             "geminiApiKey",
             "geminiModel",
             "tone",
-            "token"
+            "token",
+            "behavior"
           ],
 
           (result) => {
@@ -230,6 +231,9 @@ async function analyzePost(postText) {
 
       tone:
         settings.tone || "professional",
+
+      behavior:
+        settings.behavior || "neutral",
 
       mode:
         settings.mode || "hosted",

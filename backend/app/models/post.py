@@ -21,3 +21,5 @@ class PostRequest(BaseModel):
     model: str = "gemini-3.1-flash-lite-preview"
 
     tone: str = "professional"
+
+    behavior: str = "neutral"
