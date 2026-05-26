@@ -18,7 +18,7 @@ class PostRequest(BaseModel):
 
     api_key: Optional[str] = None
 
-    model: str = "gemini-3.1-flash-lite-preview"
+    model: str = "gemini-3.1-flash-lite"
 
     tone: str = "professional"
 

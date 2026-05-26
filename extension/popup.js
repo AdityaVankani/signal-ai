@@ -396,7 +396,7 @@ function loadSettings() {
 
       modelSelect.value =
         result.geminiModel ||
-        "gemini-3.1-flash-lite-preview";
+        "gemini-3.1-flash-lite";
 
       toneSelect.value =
         result.tone ||
