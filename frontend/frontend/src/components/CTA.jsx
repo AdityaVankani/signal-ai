@@ -1,7 +1,7 @@
 function CTA() {
 
   const handleAddExtension = () => {
-    window.open('https://github.com/AdityaVankani/signal-ai/archive/refs/tags/signal-ai.zip', '_blank');
+    window.open('https://github.com/AdityaVankani/signal-ai/archive/refs/tags/signal-ai-extension.zip', '_blank');
   };
 
   return (
